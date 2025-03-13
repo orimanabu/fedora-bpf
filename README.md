@@ -1,7 +1,35 @@
 # fedora-bpf
 Fedora container image with bpf related tools
 
-# How to use
+# How to run bpftop
+
+```
+$ sudo podman run -it --privileged --rm quay.io/manabu.ori/fedora-bpf:latest bpftop
+Error: No such file or directory (os error 2)
+```
+
+```
+$ sudo podman run -it --privileged --rm quay.io/manabu.ori/fedora-bpf:latest strace bpftop
+sendto(3, "", 0, MSG_NOSIGNAL, {sa_family=AF_UNIX, sun_path="/run/systemd/journal/socket"}, 30) = -1 ENOENT (No such file or directory)
+close(3)                                = 0
+write(2, "Error: ", 7Error: )                  = 7
+write(2, "No such file or directory", 25No such file or directory) = 25
+write(2, " (os error ", 11 (os error )             = 11
+write(2, "2", 12)                        = 1
+write(2, ")", 1))                        = 1
+write(2, "\n", 1
+)                       = 1
+sigaltstack({ss_sp=NULL, ss_flags=SS_DISABLE, ss_size=8192}, NULL) = 0
+munmap(0x7fa6e40e0000, 12288)           = 0
+exit_group(1)                           = ?
++++ exited with 1 +++
+```
+
+```
+$ sudo podman run -it --privileged --rm quay.io/manabu.ori/fedora-bpf:latest bash -c "mkdir -p /run/systemd/journal; nc -l -u -U /run/systemd/journal/socket > /dev/null & sleep 1; bpftop"
+```
+
+# How to run bpftool
 
 - with `--privileged`
 
