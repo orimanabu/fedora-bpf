@@ -30,3 +30,16 @@ Error: can't get next program: Operation not permitted
 $ sudo podman run -it --cap-add bpf,sys_admin --rm quay.io/manabu.ori/fedora-bpf:latest bpftool prog list
 Error: can't get prog by id (33): Permission denied
 ```
+
+```
+$ sudo podman run -it --cap-add bpf,sys_admin --rm quay.io/manabu.ori/fedora-bpf:latest strace bpftool prog list
+...
+bpf(BPF_PROG_GET_NEXT_ID, {start_id=0, next_id=0 => 33, open_flags=0}, 12) = 0
+bpf(BPF_PROG_GET_FD_BY_ID, {prog_id=33, next_id=0, open_flags=0}, 12) = -1 EACCES (Permission denied)
+write(2, "Error: ", 7Error: )                  = 7
+write(2, "can't get prog by id (33): Permi"..., 44can't get prog by id (33): Permission denied) = 44
+write(2, "\n", 1
+)                       = 1
+exit_group(-1)                          = ?
++++ exited with 255 +++
+```
